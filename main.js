@@ -49,15 +49,17 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
-//adding roles to new members
+//handing new members
 client.on('guildMemberAdd', member => {
 
-	const channel = member.guild.channels.cache.find(channel => channel.name === "welcome");
-	if (!channel) return;
-
-	channel.send(`Welcome to nshs.life, ${member}, please check your DMs for steps to join!`)
+	//adding "new member" role
 	member.roles.add(member.guild.roles.cache.get('1004509586142806087'))
 
+	//pinging in welcome channel
+	const channel = member.guild.channels.cache.find(channel => channel.name === "welcome");
+	channel.send(`Welcome to nshs.life, ${member}, please check your DMs for steps to join!`)
+
+	//DMing new member
 	const Embed = new EmbedBuilder()
 		.setThumbnail(client.user.displayAvatarURL())
 		.setTitle('Welcome to nshs.life!')
@@ -71,10 +73,26 @@ client.on('guildMemberAdd', member => {
 //replying to DMs
 client.on('messageCreate', msg => {
 
+	//DM (not from the bot itself)
 	if (msg.channel.type == 1 && msg.author != client.user) {
-		console.log(msg.content)
-		msg.channel.send("hello there")
 		
+
+		//regex school email
+		if (msg.content.match(/\d{9}@newton.k12.ma.us/)) {
+
+			//check if member is in guild
+			let guild = client.guilds.cache.get('1004509586142806086')
+
+			//add specific grade role to member
+			guild.members.fetch(msg.author.id)
+				.then(member => {
+					member.roles.add(guild.roles.cache.get('1004509586142806093'))
+					member.roles.remove(guild.roles.cache.get('1004509586142806087'))})
+
+			msg.channel.send("you can check out the server now!")
+		} else {
+			msg.channel.send("Please enter your school email:")
+		}
 	}
 
 });
