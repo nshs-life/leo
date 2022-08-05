@@ -78,20 +78,24 @@ client.on('messageCreate', msg => {
 		
 
 		//regex school email
+		const lasid = ""
+		const name = ""
+		const classYear = ''
 		if (msg.content.match(/\d{9}@newton.k12.ma.us/)) {
+			 lasid = msg.content.substring(0,9);
+			// //check if member is in guild
+			// let guild = client.guilds.cache.get('1004509586142806086')
 
-			//check if member is in guild
-			let guild = client.guilds.cache.get('1004509586142806086')
-
-			//add specific grade role to member
-			guild.members.fetch(msg.author.id)
-				.then(member => {
-					member.roles.add(guild.roles.cache.get('1004509586142806093'))
-					member.roles.remove(guild.roles.cache.get('1004509586142806087'))})
+			// //add specific grade role to member
+			// guild.members.fetch(msg.author.id)
+			// 	.then(member => {
+			// 		member.roles.add(guild.roles.cache.get('1004509586142806093'))
+			// 		member.roles.remove(guild.roles.cache.get('1004509586142806087'))
+			// 	})
 
 			msg.channel.send("you can check out the server now!")
 		} else {
-			msg.channel.send("Please enter your school email:")
+			msg.channel.send("Please enter a valid school email:")
 		}
 	}
 
